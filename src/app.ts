@@ -4,6 +4,10 @@ const morgan = require('morgan');
 const { default: helmet } = require('helmet');
 const app: Express = express();
 
+// connect database
+require('./dbs/init.mongodb');
+const { checkOverload } = require('./helpers/check.connect');
+checkOverload();
 // init middlewares
 
 app.use(morgan('dev')); // log request

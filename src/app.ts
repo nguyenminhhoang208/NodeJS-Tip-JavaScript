@@ -1,13 +1,24 @@
+'use strict';
+
 import compression from 'compression';
-import express, { Express, NextFunction, Request, Response } from 'express';
+import express, { Express } from 'express';
+require('dotenv').config();
 const morgan = require('morgan');
 const { default: helmet } = require('helmet');
 const app: Express = express();
+
+const routes = require('./routes');
+
+// parse application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+// parse application/json
+app.use(express.json());
 
 // connect database
 require('./dbs/init.mongodb');
 const { checkOverload } = require('./helpers/check.connect');
 checkOverload();
+
 // init middlewares
 
 app.use(morgan('dev')); // log request
@@ -16,10 +27,8 @@ app.use(helmet()); // bảo vệ những thông tin riêng tư
 
 app.use(compression()); // giảm kích thước dữ liệu vận chuyển
 
-app.get('/', (req: Request, res: Response, next: NextFunction) => {
-	return res.status(200).json({
-		message: 'Hello World!!',
-	});
-});
+// routes
+
+routes(app);
 
 module.exports = app;

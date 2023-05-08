@@ -3,9 +3,12 @@
 import { Mongoose } from 'mongoose';
 
 const mongoose: Mongoose = require('mongoose');
+const config = require('../configs/config.mongoDB');
 
 const { countConnect } = require('../helpers/check.connect');
-const urlDB = 'mongodb://127.0.0.1:27017/tipjs';
+
+const urlDB = `mongodb://${config.db.host}:${config.db.port}/${config.db.name}`;
+console.log(urlDB);
 
 // singleton for once connect
 class Database {
@@ -35,10 +38,15 @@ class Database {
 	}
 	static async getInstance() {
 		if (!this._instance) {
-			this._instance = await new Database();
+			await (() => {
+				if (!this._instance) {
+					this._instance = new Database();
+				}
+			})();
 		}
 		return this._instance;
 	}
 }
 const instanceDB = Database.getInstance();
+
 module.exports = instanceDB;

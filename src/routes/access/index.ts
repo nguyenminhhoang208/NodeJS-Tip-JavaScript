@@ -12,5 +12,6 @@ router.use(checkPermissios('0000'));
 
 // [GET] /v1/shop/signup
 router.post('/signup', asyncHandler(AccessController.signUp));
+router.post('/login', asyncHandler(AccessController.login));
 
 module.exports = router;

@@ -1,8 +1,16 @@
 import { NextFunction, Request, Response } from 'express';
 const AccessServices = require('../services/access.services');
-const { CREATED } = require('../core/success.response');
+const { CREATED, OK } = require('../core/success.response');
 
 class AccessController {
+	login = async (req: Request, res: Response, next: NextFunction) => {
+		console.log('>>> CHECK REQ.BODY LOGIN:: ', req.body);
+
+		new OK({
+			message: 'OK successfully!!',
+			metadata: await AccessServices.login(req.body),
+		}).send(res);
+	};
 	signUp = async (req: Request, res: Response, next: NextFunction) => {
 		// try {
 		// 	console.log('[P]::signUp::', req.body);

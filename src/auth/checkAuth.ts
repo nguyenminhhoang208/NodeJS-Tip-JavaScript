@@ -32,14 +32,13 @@ const checkApiKey = async (req: any, res: Response, next: NextFunction) => {
 
 const checkPermissios = (permissions: string[] | string): object => {
 	return (req: any, res: Response, next: NextFunction) => {
-		if (!req.object.permissions) {
+		if (!req.objKey.permissions) {
 			return res.status(403).json({
 				message: 'Permissions Error',
 			});
 		}
-		const verifyPermissions = req.object.permissions.includes(permissions);
-		console.log('>>> CHECK PERISSIONS::: ', verifyPermissions);
-
+		const verifyPermissions = req.objKey.permissions.includes(permissions);
+		// console.log('>>> CHECK PERISSIONS::: ', verifyPermissions);
 		if (!verifyPermissions) {
 			return res.status(403).json({
 				message: 'Permissions Error',
@@ -48,8 +47,14 @@ const checkPermissios = (permissions: string[] | string): object => {
 		return next();
 	};
 };
+const asyncHandler = (fn: Function): object => {
+	return (req: Request, res: Response, next: NextFunction) => {
+		fn(req, res, next).catch(next);
+	};
+};
 
 module.exports = {
 	checkApiKey,
 	checkPermissios,
+	asyncHandler,
 };

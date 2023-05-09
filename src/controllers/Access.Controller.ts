@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 const AccessServices = require('../services/access.services');
+const { CREATED } = require('../core/success.response');
 
 class AccessController {
 	signUp = async (req: Request, res: Response, next: NextFunction) => {
@@ -9,7 +10,14 @@ class AccessController {
 		// 200: ok
 		// 201: created
 
-		return res.status(201).json(await AccessServices.signUp(req.body));
+		new CREATED({
+			message: 'Created successfully!!',
+			metadata: await AccessServices.signUp(req.body),
+			options: {
+				limit: 10,
+			},
+		}).send(res);
+		// return res.status(201).json(await AccessServices.signUp(req.body));
 		// } catch (error) {
 		// 	next(error);
 		// }

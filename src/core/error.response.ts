@@ -8,10 +8,10 @@ enum ReasonStatusCode {
 }
 
 class ErrorResponse extends Error {
-	_status: number;
+	status: number;
 	constructor(message: string, status: number) {
 		super(message);
-		this._status = status;
+		this.status = status;
 	}
 }
 class ConflictRequestError extends ErrorResponse {
